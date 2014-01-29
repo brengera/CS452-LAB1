@@ -1,6 +1,5 @@
 #ifndef INITSHADERS_H_
 #define INITSHADERS_H_
-
 //#include "SDL2/SDL.h"
 #include "GL/glew.h"
 #include "GL/freeglut.h"
@@ -110,6 +109,27 @@ GLuint createProgram(const vector<GLuint> shadeList){
   
   for(GLuint i=0;i<shadeList.size();i++){glAttachShader(program,shadeList[i]);}//attaches shaders to program
   
+    glBindAttribLocation(program, 0, "position");//binds the location an attribute to a program
+  glLinkProgram(program);//links program to your program //weird
+  
+  GLint linkStatus;//status for linking variable
+  glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);//returns the status of linking the program into the variable
+  
+  if(!linkStatus){//checks to see if your program linked to the program
+    GLint logSize;//variable for size of the debug info
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logSize);//returns the linking status into the variable
+    
+    GLchar *infoLog = new GLchar[logSize+1];//allocating memory for the debug info
+    glGetProgramInfoLog(program,logSize,&logSize,infoLog);//returns the error messages into the variable infoLog
+    
+    fprintf(stderr,"\nShader linking failed: %s\n",infoLog);//prints your linking failed
+    delete[] infoLog;//memory management
+    
+    for(GLuint i=0;i<shadeList.size();i++){glDeleteShader(shadeList[i]);}//memory management
+  }
+  return program;//self explanatory
+}
+/*
   glBindAttribLocation(program, 0, "position");//binds the location an attribute to a program
   glBindAttribLocation(program, 1, "position");//binds the location an attribute to a program
   glBindAttribLocation(program, 2, "position");//binds the location an attribute to a program
@@ -136,4 +156,5 @@ GLuint createProgram(const vector<GLuint> shadeList){
   }
   return program;//self explanatory
 }
+*/
 #endif
