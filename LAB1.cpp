@@ -172,7 +172,7 @@ void mousepress(int button, int state, int x, int y){
 int main(int argc, char **argv){
 	
 	glutInit(&argc,argv);
-	glutCreateWindow("dots");
+	glutCreateWindow("Dots -> Square -> Triangle");
 
 	
 	glewExperimental=GL_TRUE;
